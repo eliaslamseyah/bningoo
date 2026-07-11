@@ -1,90 +1,100 @@
 import * as React from 'react';
 import { cn } from './utils';
 
-/* ── Typography Components ───────────────────────────────────────── */
+/* ── Typography System ────────────────────────────────────────────── */
 
-export function H1({ className, children, ...props }: React.HTMLAttributes<HTMLHeadingElement>) {
-  return (
-    <h1 className={cn('scroll-m-20 text-4xl font-bold tracking-tight lg:text-5xl', className)} {...props}>
-      {children}
-    </h1>
-  );
+type HeadingLevel = 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
+type TextVariant = 'body' | 'body-sm' | 'caption' | 'overline' | 'lead';
+type TextColor = 'default' | 'muted' | 'primary' | 'accent' | 'error' | 'success' | 'warning';
+
+const headingStyles: Record<HeadingLevel, string> = {
+  h1: 'text-4xl sm:text-5xl font-bold tracking-tight',
+  h2: 'text-3xl sm:text-4xl font-bold tracking-tight',
+  h3: 'text-2xl sm:text-3xl font-semibold tracking-tight',
+  h4: 'text-xl sm:text-2xl font-semibold tracking-tight',
+  h5: 'text-lg sm:text-xl font-semibold',
+  h6: 'text-base sm:text-lg font-semibold',
+};
+
+const textStyles: Record<TextVariant, string> = {
+  body: 'text-base leading-relaxed',
+  'body-sm': 'text-sm leading-relaxed',
+  caption: 'text-xs leading-normal',
+  overline: 'text-xs font-semibold uppercase tracking-widest',
+  lead: 'text-lg leading-relaxed text-neutral-500 dark:text-neutral-400',
+};
+
+const textColors: Record<TextColor, string> = {
+  default: 'text-neutral-900 dark:text-neutral-100',
+  muted: 'text-neutral-500 dark:text-neutral-400',
+  primary: 'text-primary-600 dark:text-primary-400',
+  accent: 'text-accent-600 dark:text-accent-400',
+  error: 'text-error',
+  success: 'text-success',
+  warning: 'text-warning',
+};
+
+export interface HeadingProps extends React.HTMLAttributes<HTMLHeadingElement> {
+  as?: HeadingLevel;
 }
 
-export function H2({ className, children, ...props }: React.HTMLAttributes<HTMLHeadingElement>) {
-  return (
-    <h2 className={cn('scroll-m-20 text-3xl font-semibold tracking-tight', className)} {...props}>
-      {children}
-    </h2>
-  );
+const Heading = React.forwardRef<HTMLHeadingElement, HeadingProps>(
+  ({ className, as = 'h2', ...props }, ref) => {
+    const Comp = as;
+    return (
+      <Comp
+        ref={ref}
+        className={cn(
+          headingStyles[as],
+          'text-neutral-900 dark:text-neutral-100',
+          className
+        )}
+        {...props}
+      />
+    );
+  }
+);
+Heading.displayName = 'Heading';
+
+export interface TypographyProps extends React.HTMLAttributes<HTMLParagraphElement> {
+  variant?: TextVariant;
+  color?: TextColor;
 }
 
-export function H3({ className, children, ...props }: React.HTMLAttributes<HTMLHeadingElement>) {
-  return (
-    <h3 className={cn('scroll-m-20 text-2xl font-semibold tracking-tight', className)} {...props}>
-      {children}
-    </h3>
-  );
-}
-
-export function H4({ className, children, ...props }: React.HTMLAttributes<HTMLHeadingElement>) {
-  return (
-    <h4 className={cn('scroll-m-20 text-xl font-semibold tracking-tight', className)} {...props}>
-      {children}
-    </h4>
-  );
-}
-
-export function Lead({ className, children, ...props }: React.HTMLAttributes<HTMLParagraphElement>) {
-  return (
-    <p className={cn('text-xl text-neutral-500 dark:text-neutral-400', className)} {...props}>
-      {children}
-    </p>
-  );
-}
-
-export function Large({ className, children, ...props }: React.HTMLAttributes<HTMLDivElement>) {
-  return (
-    <div className={cn('text-lg font-semibold', className)} {...props}>
-      {children}
-    </div>
-  );
-}
-
-export function Small({ className, children, ...props }: React.HTMLAttributes<HTMLElement>) {
-  return (
-    <small className={cn('text-sm font-medium leading-none', className)} {...props}>
-      {children}
-    </small>
-  );
-}
-
-export function Muted({ className, children, ...props }: React.HTMLAttributes<HTMLParagraphElement>) {
-  return (
-    <p className={cn('text-sm text-neutral-500 dark:text-neutral-400', className)} {...props}>
-      {children}
-    </p>
-  );
-}
-
-export function Caption({ className, children, ...props }: React.HTMLAttributes<HTMLParagraphElement>) {
-  return (
-    <p className={cn('text-xs text-neutral-500 dark:text-neutral-400', className)} {...props}>
-      {children}
-    </p>
-  );
-}
-
-export function InlineCode({ className, children, ...props }: React.HTMLAttributes<HTMLElement>) {
-  return (
-    <code
-      className={cn(
-        'relative rounded bg-neutral-100 px-[0.3rem] py-[0.2rem] font-mono text-sm font-medium text-neutral-900 dark:bg-neutral-800 dark:text-neutral-100',
-        className
-      )}
+const Typography = React.forwardRef<HTMLParagraphElement, TypographyProps>(
+  ({ className, variant = 'body', color = 'default', ...props }, ref) => (
+    <p
+      ref={ref}
+      className={cn(textStyles[variant], textColors[color], className)}
       {...props}
-    >
-      {children}
-    </code>
-  );
+    />
+  )
+);
+Typography.displayName = 'Typography';
+
+export interface TextProps extends React.HTMLAttributes<HTMLSpanElement> {
+  variant?: TextVariant;
+  color?: TextColor;
+  weight?: 'normal' | 'medium' | 'semibold' | 'bold';
 }
+
+const textWeights = {
+  normal: 'font-normal',
+  medium: 'font-medium',
+  semibold: 'font-semibold',
+  bold: 'font-bold',
+};
+
+const Text = React.forwardRef<HTMLSpanElement, TextProps>(
+  ({ className, variant = 'body-sm', color = 'default', weight = 'normal', ...props }, ref) => (
+    <span
+      ref={ref}
+      className={cn(textStyles[variant], textColors[color], textWeights[weight], className)}
+      {...props}
+    />
+  )
+);
+Text.displayName = 'Text';
+
+export { Heading, Typography, Text };
+export type { HeadingLevel, TextVariant, TextColor };

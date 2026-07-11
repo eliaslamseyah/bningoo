@@ -3,19 +3,19 @@ export type { ButtonProps } from './button';
 
 export { Card, CardHeader, CardFooter, CardTitle, CardDescription, CardContent } from './card';
 
-export { Input } from './input';
+export { Input, Label } from './input';
 export type { InputProps } from './input';
 
 export { Textarea } from './textarea';
 export type { TextareaProps } from './textarea';
 
-export { Label } from './label';
-
 export { Checkbox } from './checkbox';
+export type { CheckboxProps } from './checkbox';
 
 export { RadioGroup, RadioGroupItem } from './radio-group';
 
 export { Switch } from './switch';
+export type { SwitchProps } from './switch';
 
 export {
   Select,
@@ -46,28 +46,29 @@ export {
 export { Tabs, TabsList, TabsTrigger, TabsContent } from './tabs';
 
 export {
-  H1, H2, H3, H4,
-  Lead, Large, Small, Muted, Caption, InlineCode,
+  Typography, Heading, Text,
 } from './typography';
+export type { TypographyProps, HeadingProps, TextProps } from './typography';
 
 export {
   Container,
   Grid,
   Stack,
-  SidebarLayout,
   Sidebar,
-  Main,
-  Separator,
-  Breadcrumbs,
-  Navbar,
+  Spacer,
 } from './layout';
 export type {
   ContainerProps,
   GridProps,
   StackProps,
-  SidebarLayoutProps,
-  BreadcrumbItem,
-  NavbarProps,
+  SidebarProps,
+  SpacerProps,
 } from './layout';
+
+export { Navbar, NavbarBrand, NavbarSection, Breadcrumbs } from './navigation';
+export type { BreadcrumbItem, BreadcrumbsProps, NavbarProps } from './navigation';
+
+export { Separator } from './separator';
+export { Avatar, AvatarImage, AvatarFallback } from './avatar';
 
 export { cn } from './utils';

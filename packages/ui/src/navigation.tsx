@@ -55,7 +55,6 @@ const Tabs = React.forwardRef<HTMLDivElement, TabsProps>(
                   ? 'bg-neutral-100 dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 border-neutral-300 dark:border-neutral-600 z-10'
                   : 'bg-white dark:bg-neutral-950 text-neutral-500 hover:text-neutral-700 dark:text-neutral-400 dark:hover:text-neutral-200',
               ],
-              className
             )}
           >
             {tab.label}

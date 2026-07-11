@@ -2,7 +2,7 @@
   "name": "@bningoo/ui",
   "version": "0.1.0",
   "private": true,
-  "main": "index.ts",
+  "main": "index.tsx",
   "scripts": {
     "lint": "tsc --noEmit"
   },

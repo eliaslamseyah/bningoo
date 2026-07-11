@@ -3,61 +3,45 @@ import * as RadioGroupPrimitive from '@radix-ui/react-radio-group';
 import { Circle } from 'lucide-react';
 import { cn } from './utils';
 
+export interface RadioGroupItemProps extends React.ComponentPropsWithoutRef<typeof RadioGroupPrimitive.Item> {
+  label?: string;
+}
+
 const RadioGroup = React.forwardRef<
   React.ElementRef<typeof RadioGroupPrimitive.Root>,
   React.ComponentPropsWithoutRef<typeof RadioGroupPrimitive.Root>
 >(({ className, ...props }, ref) => {
-  return (
-    <RadioGroupPrimitive.Root
-      className={cn('grid gap-2', className)}
-      {...props}
-      ref={ref}
-    />
-  );
+  return <RadioGroupPrimitive.Root className={cn('grid gap-2', className)} {...props} ref={ref} />;
 });
 RadioGroup.displayName = RadioGroupPrimitive.Root.displayName;
 
 const RadioGroupItem = React.forwardRef<
   React.ElementRef<typeof RadioGroupPrimitive.Item>,
-  React.ComponentPropsWithoutRef<typeof RadioGroupPrimitive.Item> & { label?: string }
+  RadioGroupItemProps
 >(({ className, label, id, ...props }, ref) => {
-  const radioId = id || props.value;
-  const radio = (
-    <RadioGroupPrimitive.Item
-      ref={ref}
-      id={radioId}
-      className={cn(
-        'aspect-square h-4 w-4 rounded-full border border-neutral-300 dark:border-neutral-600',
-        'bg-white dark:bg-neutral-950',
-        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-neutral-950',
-        'disabled:cursor-not-allowed disabled:opacity-50',
-        'data-[state=checked]:border-primary-600 dark:data-[state=checked]:border-primary-500',
-        'transition-colors duration-150',
-        className
-      )}
-      {...props}
-    >
-      <RadioGroupPrimitive.Indicator className="flex items-center justify-center">
-        <Circle className="h-2 w-2 fill-primary-600 dark:fill-primary-500 text-primary-600 dark:text-primary-500" />
-      </RadioGroupPrimitive.Indicator>
-    </RadioGroupPrimitive.Item>
-  );
-
-  if (label) {
-    return (
-      <div className="flex items-center gap-2">
-        {radio}
-        <label
-          htmlFor={radioId}
-          className="text-sm font-medium leading-none text-neutral-700 dark:text-neutral-300 cursor-pointer"
-        >
+  const itemId = id || `radio-${React.useId()}`;
+  return (
+    <div className="flex items-center gap-2">
+      <RadioGroupPrimitive.Item
+        id={itemId}
+        ref={ref}
+        className={cn(
+          'aspect-square h-4 w-4 rounded-full border border-neutral-400 text-primary-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:border-neutral-600',
+          className
+        )}
+        {...props}
+      >
+        <RadioGroupPrimitive.Indicator className="flex items-center justify-center">
+          <Circle className="h-2.5 w-2.5 fill-current text-current" />
+        </RadioGroupPrimitive.Indicator>
+      </RadioGroupPrimitive.Item>
+      {label && (
+        <label htmlFor={itemId} className="text-sm font-medium leading-none cursor-pointer">
           {label}
         </label>
-      </div>
-    );
-  }
-
-  return radio;
+      )}
+    </div>
+  );
 });
 RadioGroupItem.displayName = RadioGroupPrimitive.Item.displayName;
 

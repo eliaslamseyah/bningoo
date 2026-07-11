@@ -1,368 +1,473 @@
 'use client';
 
-import { useState } from 'react';
+import * as React from 'react';
 import {
   Button,
-  Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter,
-  Input, Textarea, Label, Checkbox, RadioGroup, RadioGroupItem,
-  Switch, Select, SelectTrigger, SelectValue, SelectContent, SelectItem,
-  Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter, DialogClose,
-  Tabs, TabsList, TabsTrigger, TabsContent,
-  Container, Grid, Stack, Separator, Breadcrumbs, Navbar,
-  H1, H2, H3, H4, Lead, Large, Small, Muted, Caption, InlineCode,
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+  CardFooter,
+  Input,
+  Label,
+  Textarea,
+  Checkbox,
+  RadioGroup,
+  RadioGroupItem,
+  Switch,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+  Dialog,
+  DialogTrigger,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  Container,
+  Grid,
+  Stack,
+  Sidebar,
+  Spacer,
+  Tabs,
+  Breadcrumbs,
+  Navbar,
+  NavbarBrand,
+  NavbarSection,
+  Separator,
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+  Heading,
+  Typography,
+  Text,
 } from '@bningoo/ui';
-import { Sun, Moon, SunMoon, ShoppingCart, Bell, Menu } from 'lucide-react';
 
-function DemoSection({ title, children }: { title: string; children: React.ReactNode }) {
+/* ── Section wrapper component ─────────────────────────────────── */
+function Section({ title, description, children }: { title: string; description?: string; children: React.ReactNode }) {
   return (
-    <section className="space-y-4">
-      <H3 className="border-b border-neutral-200 pb-2 dark:border-neutral-800">{title}</H3>
-      <div className="flex flex-wrap items-start gap-4 rounded-xl border border-neutral-200 bg-white p-6 dark:border-neutral-800 dark:bg-neutral-900">
-        {children}
-      </div>
-    </section>
+    <Card variant="elevated" className="mb-12">
+      <CardHeader>
+        <CardTitle className="text-2xl">{title}</CardTitle>
+        {description && <CardDescription>{description}</CardDescription>}
+      </CardHeader>
+      <CardContent>
+        <Stack gap="lg">{children}</Stack>
+      </CardContent>
+    </Card>
   );
 }
 
-export default function DesignSystemPage() {
-  const [darkMode, setDarkMode] = useState(false);
+function DemoRow({ label, children }: { label: string; children: React.ReactNode }) {
+  return (
+    <div>
+      <Text variant="caption" color="muted" className="mb-2 block">{label}</Text>
+      <div className="flex flex-wrap items-center gap-3">
+        {children}
+      </div>
+    </div>
+  );
+}
 
-  const toggleDark = () => {
-    const next = !darkMode;
-    setDarkMode(next);
-    document.documentElement.classList.toggle('dark', next);
-  };
+/* ── Theme Toggle ───────────────────────────────────────────────── */
+function ThemeToggle() {
+  const [dark, setDark] = React.useState(false);
+  React.useEffect(() => {
+    document.documentElement.classList.toggle('dark', dark);
+  }, [dark]);
+  return (
+    <label className="flex items-center gap-2 cursor-pointer">
+      <input type="checkbox" checked={dark} onChange={(e) => setDark(e.target.checked)} className="sr-only peer" />
+      <div className="relative w-9 h-5 bg-neutral-300 dark:bg-neutral-600 peer-checked:bg-primary-500 rounded-full transition-colors after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:after:translate-x-4" />
+      <Text variant="body-sm">{dark ? '🌙 Dark' : '☀️ Light'}</Text>
+    </label>
+  );
+}
+
+/* ── Home Page ──────────────────────────────────────────────────── */
+export default function Home() {
+  const [dialogOpen, setDialogOpen] = React.useState(false);
 
   return (
-    <div className="min-h-screen bg-neutral-50 dark:bg-neutral-950">
-      {/* Top Nav */}
-      <Navbar
-        logo="Bningoo DS"
-        links={[
-          { label: 'Components', href: '#components', active: true },
-          { label: 'Typography', href: '#typography' },
-          { label: 'Layout', href: '#layout' },
-        ]}
-      >
-        <Button variant="ghost" size="icon" onClick={toggleDark} aria-label="Toggle dark mode">
-          {darkMode ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-        </Button>
+    <>
+      <Navbar>
+        <NavbarBrand>
+          <svg width="28" height="28" viewBox="0 0 28 28" fill="none" className="text-primary-600">
+            <rect width="28" height="28" rx="6" fill="currentColor" />
+            <path d="M8 14L12 18L20 10" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+          Bningoo UI
+        </NavbarBrand>
+        <NavbarSection>
+          <ThemeToggle />
+        </NavbarSection>
       </Navbar>
 
       <Container className="py-10">
-        {/* Hero */}
-        <div className="mb-12 text-center">
-          <H1>Bningoo Design System</H1>
-          <Lead>Gen 2 &middot; Tailwind CSS v4 &middot; Radix UI</Lead>
-          <div className="mt-4 flex items-center justify-center gap-2">
-            <span className="inline-flex items-center rounded-full bg-primary-100 px-3 py-1 text-xs font-medium text-primary-700 dark:bg-primary-900/30 dark:text-primary-300">
-              19 Components
-            </span>
-            <span className="inline-flex items-center rounded-full bg-accent-100 px-3 py-1 text-xs font-medium text-accent-700 dark:bg-accent-900/30 dark:text-accent-300">
-              Light/Dark
-            </span>
-            <span className="inline-flex items-center rounded-full bg-neutral-100 px-3 py-1 text-xs font-medium text-neutral-700 dark:bg-neutral-800 dark:text-neutral-300">
-              Responsive
-            </span>
-          </div>
-        </div>
+        {/* Header */}
+        <Stack gap="sm" className="mb-12 text-center">
+          <Heading as="h1">Bningoo Design System</Heading>
+          <Typography variant="lead" color="muted">
+            A comprehensive component library for the Bningoo platform.
+            Tailwind CSS v4, shadcn/ui inspired, fully accessible.
+          </Typography>
+          <Breadcrumbs
+            className="justify-center mt-2"
+            items={[
+              { label: 'Home' },
+              { label: 'Design System', href: '/' },
+            ]}
+          />
+        </Stack>
 
-        <Separator className="mb-10" />
+        <Separator className="mb-12" />
 
-        {/* Breadcrumb demo */}
-        <Breadcrumbs items={[
-          { label: 'Home', href: '/' },
-          { label: 'Design System' },
-        ]} />
-
-        <div id="components" className="space-y-10">
-          {/* ── Buttons ── */}
-          <DemoSection title="Button">
-            <Button>Default</Button>
+        {/* ── BUTTONS ─────────────────────────────────── */}
+        <Section title="Buttons" description="Variants, sizes, and states.">
+          <DemoRow label="Variants">
+            <Button variant="default">Default</Button>
             <Button variant="secondary">Secondary</Button>
             <Button variant="outline">Outline</Button>
             <Button variant="ghost">Ghost</Button>
             <Button variant="destructive">Destructive</Button>
             <Button variant="link">Link</Button>
+          </DemoRow>
+          <DemoRow label="Sizes">
             <Button size="sm">Small</Button>
+            <Button size="md">Medium</Button>
             <Button size="lg">Large</Button>
-            <Button size="icon"><ShoppingCart className="h-4 w-4" /></Button>
+            <Button size="xl">Extra Large</Button>
+          </DemoRow>
+          <DemoRow label="States">
             <Button disabled>Disabled</Button>
-          </DemoSection>
+            <Button className="animate-pulse">Loading…</Button>
+          </DemoRow>
+        </Section>
 
-          {/* ── Card ── */}
-          <DemoSection title="Card">
-            <Card className="w-80">
+        {/* ── FORM COMPONENTS ─────────────────────────── */}
+        <Section title="Form Components" description="Input, Select, Checkbox, Radio, Switch, Textarea.">
+          <DemoRow label="Input">
+            <div className="w-72">
+              <Label htmlFor="demo-input">Email <span className="text-error">*</span></Label>
+              <Input id="demo-input" type="email" placeholder="you@company.com" className="mt-1" />
+            </div>
+          </DemoRow>
+          <DemoRow label="Input (Error)">
+            <div className="w-72">
+              <Label htmlFor="demo-input-error">Password</Label>
+              <Input id="demo-input-error" type="password" error placeholder="••••••••" className="mt-1" />
+              <Text variant="caption" color="error" className="mt-1">Password must be at least 8 characters</Text>
+            </div>
+          </DemoRow>
+          <DemoRow label="Textarea">
+            <div className="w-full max-w-md">
+              <Label htmlFor="demo-textarea">Description</Label>
+              <Textarea id="demo-textarea" placeholder="Write your message…" className="mt-1" />
+            </div>
+          </DemoRow>
+          <DemoRow label="Select">
+            <div className="w-72">
+              <Label htmlFor="demo-select">Role</Label>
+              <Select>
+                <SelectTrigger id="demo-select" className="mt-1">
+                  <SelectValue placeholder="Select a role" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="customer">Customer</SelectItem>
+                  <SelectItem value="employee">Employee</SelectItem>
+                  <SelectItem value="kitchen">Kitchen Staff</SelectItem>
+                  <SelectItem value="admin">Admin</SelectItem>
+                  <SelectItem value="company_manager">Company Manager</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </DemoRow>
+          <DemoRow label="Checkboxes">
+            <Checkbox label="Remember me" />
+            <Checkbox label="Subscribe to newsletter" defaultChecked />
+            <Checkbox label="I agree to terms" disabled />
+          </DemoRow>
+          <DemoRow label="Radio Group">
+            <RadioGroup defaultValue="option-1">
+              <RadioGroupItem value="option-1" label="Option 1" />
+              <RadioGroupItem value="option-2" label="Option 2" />
+              <RadioGroupItem value="option-3" label="Option 3 (disabled)" disabled />
+            </RadioGroup>
+          </DemoRow>
+          <DemoRow label="Switches">
+            <Switch label="Notifications" defaultChecked />
+            <Switch label="Dark mode" />
+            <Switch label="Auto-renew" disabled />
+          </DemoRow>
+        </Section>
+
+        {/* ── CARDS ───────────────────────────────────── */}
+        <Section title="Cards" description="Variants: default, elevated, bordered, ghost.">
+          <Grid cols={4} gap="md">
+            <Card variant="default">
               <CardHeader>
-                <CardTitle>Card Title</CardTitle>
-                <CardDescription>Card description goes here.</CardDescription>
+                <CardTitle>Default</CardTitle>
+                <CardDescription>Standard card with border and subtle shadow.</CardDescription>
               </CardHeader>
               <CardContent>
-                <p className="text-sm text-neutral-600 dark:text-neutral-400">
-                  This is the card body content. Cards can contain any elements.
-                </p>
+                <Typography variant="body-sm">Body content goes here.</Typography>
               </CardContent>
-              <CardFooter className="justify-end gap-2">
-                <Button variant="outline" size="sm">Cancel</Button>
-                <Button size="sm">Save</Button>
-              </CardFooter>
             </Card>
-          </DemoSection>
+            <Card variant="elevated">
+              <CardHeader>
+                <CardTitle>Elevated</CardTitle>
+                <CardDescription>More prominent shadow for modals.</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <Typography variant="body-sm">Lifted surface effect.</Typography>
+              </CardContent>
+            </Card>
+            <Card variant="bordered">
+              <CardHeader>
+                <CardTitle>Bordered</CardTitle>
+                <CardDescription>Bold 2px border style.</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <Typography variant="body-sm">Great for selection states.</Typography>
+              </CardContent>
+            </Card>
+            <Card variant="ghost">
+              <CardHeader>
+                <CardTitle>Ghost</CardTitle>
+                <CardDescription>Subtle background only.</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <Typography variant="body-sm">Minimal visual weight.</Typography>
+              </CardContent>
+            </Card>
+          </Grid>
+          <Separator className="my-4" />
+          <Card className="max-w-md">
+            <CardHeader>
+              <CardTitle>Order Summary</CardTitle>
+              <CardDescription>2 items in your cart</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Stack gap="sm">
+                <div className="flex justify-between"><Text>Chicken Rice Bowl</Text><Text weight="medium">$12.50</Text></div>
+                <div className="flex justify-between"><Text>Iced Lemon Tea</Text><Text weight="medium">$3.50</Text></div>
+                <Separator />
+                <div className="flex justify-between"><Text weight="semibold">Total</Text><Text weight="bold" color="primary">$16.00</Text></div>
+              </Stack>
+            </CardContent>
+            <CardFooter>
+              <Button className="w-full">Checkout</Button>
+            </CardFooter>
+          </Card>
+        </Section>
 
-          {/* ── Input & Textarea ── */}
-          <DemoSection title="Input & Textarea">
-            <div className="w-full max-w-sm space-y-3">
-              <div className="space-y-1">
-                <Label htmlFor="email">Email</Label>
-                <Input id="email" type="email" placeholder="name@example.com" />
-              </div>
-              <div className="space-y-1">
-                <Label htmlFor="name">Name</Label>
-                <Input id="name" placeholder="Your name" />
-              </div>
-              <div className="space-y-1">
-                <Label htmlFor="bio">Bio</Label>
-                <Textarea id="bio" placeholder="Tell us about yourself..." />
-              </div>
-              <Input disabled placeholder="Disabled input" />
-            </div>
-          </DemoSection>
-
-          {/* ── Checkbox & Radio & Switch ── */}
-          <DemoSection title="Checkbox & Radio & Switch">
-            <div className="flex flex-col gap-4">
-              <div className="flex items-center gap-2">
-                <Checkbox id="terms" />
-                <Label htmlFor="terms">Accept terms</Label>
-              </div>
-              <div className="flex items-center gap-2">
-                <Checkbox id="newsletter" defaultChecked />
-                <Label htmlFor="newsletter">Subscribe to newsletter</Label>
-              </div>
-            </div>
-            <RadioGroup defaultValue="option1" className="flex flex-col gap-2">
-              <div className="flex items-center gap-2">
-                <RadioGroupItem value="option1" id="r1" />
-                <Label htmlFor="r1">Option 1</Label>
-              </div>
-              <div className="flex items-center gap-2">
-                <RadioGroupItem value="option2" id="r2" />
-                <Label htmlFor="r2">Option 2</Label>
-              </div>
-            </RadioGroup>
-            <div className="flex items-center gap-2">
-              <Switch id="airplane" />
-              <Label htmlFor="airplane">Airplane Mode</Label>
-            </div>
-            <div className="flex items-center gap-2">
-              <Switch id="notifs" defaultChecked />
-              <Label htmlFor="notifs">Notifications</Label>
-            </div>
-          </DemoSection>
-
-          {/* ── Select ── */}
-          <DemoSection title="Select">
-            <Select>
-              <SelectTrigger className="w-60">
-                <SelectValue placeholder="Select a fruit" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="apple">Apple</SelectItem>
-                <SelectItem value="banana">Banana</SelectItem>
-                <SelectItem value="orange">Orange</SelectItem>
-                <SelectItem value="grape">Grape</SelectItem>
-                <SelectItem value="strawberry">Strawberry</SelectItem>
-              </SelectContent>
-            </Select>
-          </DemoSection>
-
-          {/* ── Dialog ── */}
-          <DemoSection title="Dialog">
-            <Dialog>
-              <DialogTrigger asChild>
-                <Button>Open Dialog</Button>
-              </DialogTrigger>
-              <DialogContent>
-                <DialogHeader>
-                  <DialogTitle>Confirm Action</DialogTitle>
-                  <DialogDescription>
-                    This action cannot be undone. Are you sure you want to proceed?
-                  </DialogDescription>
-                </DialogHeader>
-                <div className="py-4">
-                  <p className="text-sm text-neutral-600 dark:text-neutral-400">
-                    Dialog content goes here. You can put any components inside.
-                  </p>
-                </div>
-                <DialogFooter>
-                  <DialogClose asChild>
-                    <Button variant="outline">Cancel</Button>
-                  </DialogClose>
-                  <Button>Confirm</Button>
-                </DialogFooter>
-              </DialogContent>
-            </Dialog>
-          </DemoSection>
-
-          {/* ── Tabs ── */}
-          <DemoSection title="Tabs">
-            <div className="w-full max-w-md">
-              <Tabs defaultValue="tab1">
-                <TabsList>
-                  <TabsTrigger value="tab1">Account</TabsTrigger>
-                  <TabsTrigger value="tab2">Password</TabsTrigger>
-                  <TabsTrigger value="tab3">Notifications</TabsTrigger>
-                </TabsList>
-                <TabsContent value="tab1" className="rounded-lg border border-neutral-200 p-4 dark:border-neutral-800">
-                  <p className="text-sm">Manage your account settings.</p>
-                </TabsContent>
-                <TabsContent value="tab2" className="rounded-lg border border-neutral-200 p-4 dark:border-neutral-800">
-                  <p className="text-sm">Change your password.</p>
-                </TabsContent>
-                <TabsContent value="tab3" className="rounded-lg border border-neutral-200 p-4 dark:border-neutral-800">
-                  <p className="text-sm">Configure notification preferences.</p>
-                </TabsContent>
-              </Tabs>
-            </div>
-          </DemoSection>
-        </div>
-
-        {/* ── Typography ── */}
-        <div id="typography" className="mt-16 space-y-6">
+        {/* ── TYPOGRAPHY ───────────────────────────────── */}
+        <Section title="Typography" description="Heading scale, body text, and utilities.">
+          <Stack gap="xs">
+            <Heading as="h1">Heading 1 — 4xl</Heading>
+            <Heading as="h2">Heading 2 — 3xl</Heading>
+            <Heading as="h3">Heading 3 — 2xl</Heading>
+            <Heading as="h4">Heading 4 — xl</Heading>
+            <Heading as="h5">Heading 5 — lg</Heading>
+            <Heading as="h6">Heading 6 — base</Heading>
+          </Stack>
           <Separator />
-          <H2 className="mt-8">Typography</H2>
-          <DemoSection title="Headings">
-            <div className="w-full space-y-2">
-              <H1>Heading 1 — Page title</H1>
-              <H2>Heading 2 — Section title</H2>
-              <H3>Heading 3 — Sub-section title</H3>
-              <H4>Heading 4 — Card title</H4>
-            </div>
-          </DemoSection>
-          <DemoSection title="Text Styles">
-            <div className="w-full space-y-3">
-              <Lead>Lead paragraph — Introduces sections with emphasis.</Lead>
-              <Large>Large text — Emphasised block.</Large>
-              <p className="text-base">Body text — The standard paragraph style for reading.</p>
-              <Small>Small text — Fine print, helper text.</Small>
-              <Muted>Muted text — Less prominent information.</Muted>
-              <Caption>Caption — Image captions, timestamps.</Caption>
-              <p>Inline <InlineCode>code snippet</InlineCode> example.</p>
-            </div>
-          </DemoSection>
-        </div>
-
-        {/* ── Layout Components ── */}
-        <div id="layout" className="mt-16 space-y-6">
+          <Stack gap="xs">
+            <Typography variant="lead">Lead paragraph — slightly larger, muted.</Typography>
+            <Typography variant="body">Body text — the standard reading size with relaxed leading.</Typography>
+            <Typography variant="body-sm">Small body — compact text for dense layouts.</Typography>
+            <Typography variant="caption">Caption — tiny text, great for footnotes and metadata.</Typography>
+            <Typography variant="overline">OVERLINE — UPPERCASE, WIDE LETTER SPACING</Typography>
+          </Stack>
           <Separator />
-          <H2 className="mt-8">Layout</H2>
+          <Stack gap="xs">
+            <Text color="default">Default text color</Text>
+            <Text color="muted">Muted text color</Text>
+            <Text color="primary">Primary text color</Text>
+            <Text color="accent">Accent text color</Text>
+            <Text color="error">Error text color</Text>
+            <Text color="success">Success text color</Text>
+            <Text color="warning">Warning text color</Text>
+          </Stack>
+          <DemoRow label="Font Weights">
+            <Text weight="normal">Normal</Text>
+            <Text weight="medium">Medium</Text>
+            <Text weight="semibold">Semibold</Text>
+            <Text weight="bold">Bold</Text>
+          </DemoRow>
+        </Section>
 
-          <DemoSection title="Container">
-            <Container size="sm" className="bg-neutral-100 p-4 text-center text-sm dark:bg-neutral-800">
-              Container 'sm' — max-w-3xl
-            </Container>
-          </DemoSection>
-
-          <DemoSection title="Grid">
-            <Grid cols={3} className="w-full">
-              {[1, 2, 3].map((i) => (
-                <div key={i} className="rounded-lg bg-primary-100 p-4 text-center text-sm font-medium text-primary-700 dark:bg-primary-900/30 dark:text-primary-300">
-                  Grid Item {i}
+        {/* ── LAYOUT ──────────────────────────────────── */}
+        <Section title="Layout Components" description="Container, Grid, Stack, Spacer.">
+          <DemoRow label="Container">
+            <div className="w-full bg-primary-100 dark:bg-primary-950 rounded-lg p-4 text-center">
+              <Text variant="body-sm" color="primary">Container (max-w-7xl, centered, responsive padding)</Text>
+            </div>
+          </DemoRow>
+          <DemoRow label="Grid (4 columns, gap)">
+            <Grid cols={4} gap="md" className="w-full">
+              {[1, 2, 3, 4].map(i => (
+                <div key={i} className="bg-neutral-100 dark:bg-neutral-800 rounded-lg p-4 text-center">
+                  <Text variant="body-sm">Col {i}</Text>
                 </div>
               ))}
             </Grid>
-          </DemoSection>
-
-          <DemoSection title="Stack">
+          </DemoRow>
+          <DemoRow label="Stack (row)">
             <Stack direction="row" gap="sm">
-              {['A', 'B', 'C', 'D'].map((letter) => (
-                <div key={letter} className="rounded-lg bg-accent-100 px-4 py-2 text-sm font-medium text-accent-700 dark:bg-accent-900/30 dark:text-accent-300">
-                  {letter}
+              <div className="bg-accent-100 dark:bg-accent-950 rounded-lg p-3"><Text variant="body-sm" color="accent">A</Text></div>
+              <div className="bg-accent-100 dark:bg-accent-950 rounded-lg p-3"><Text variant="body-sm" color="accent">B</Text></div>
+              <div className="bg-accent-100 dark:bg-accent-950 rounded-lg p-3"><Text variant="body-sm" color="accent">C</Text></div>
+            </Stack>
+          </DemoRow>
+        </Section>
+
+        {/* ── DIALOG ──────────────────────────────────── */}
+        <Section title="Dialog" description="Modal overlay with accessible focus management.">
+          <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+            <DialogTrigger asChild>
+              <Button>Open Dialog</Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Confirm Order</DialogTitle>
+                <DialogDescription>
+                  Are you sure you want to place this order for <strong>$16.00</strong>?
+                  This action cannot be undone.
+                </DialogDescription>
+              </DialogHeader>
+              <div className="flex flex-col gap-4 py-4">
+                <div className="flex justify-between text-sm">
+                  <span className="text-neutral-500">Items</span>
+                  <span>2</span>
+                </div>
+                <div className="flex justify-between text-sm">
+                  <span className="text-neutral-500">Total</span>
+                  <span className="font-semibold text-primary-600">$16.00</span>
+                </div>
+              </div>
+              <div className="flex justify-end gap-3">
+                <Button variant="outline" onClick={() => setDialogOpen(false)}>Cancel</Button>
+                <Button onClick={() => { alert('Order placed!'); setDialogOpen(false); }}>Confirm</Button>
+              </div>
+            </DialogContent>
+          </Dialog>
+        </Section>
+
+        {/* ── TABS ────────────────────────────────────── */}
+        <Section title="Tabs" description="Underline, pills, and segmented button variants.">
+          <DemoRow label="Underline Tabs (custom)">
+
+            <Tabs
+              tabs={[
+                { value: 'menu', label: 'Menu' },
+                { value: 'orders', label: 'Orders' },
+                { value: 'settings', label: 'Settings' },
+                { value: 'disabled', label: 'Disabled', disabled: true },
+              ]}
+            />
+          </DemoRow>
+          <DemoRow label="Pills Tabs">
+            <Tabs
+              variant="pills"
+              tabs={[
+                { value: 'all', label: 'All Items' },
+                { value: 'meals', label: 'Meals' },
+                { value: 'drinks', label: 'Drinks' },
+                { value: 'sides', label: 'Sides' },
+              ]}
+            />
+          </DemoRow>
+          <DemoRow label="Segmented Tabs">
+            <Tabs
+              variant="buttons"
+              tabs={[
+                { value: 'day', label: 'Day' },
+                { value: 'week', label: 'Week' },
+                { value: 'month', label: 'Month' },
+              ]}
+            />
+          </DemoRow>
+        </Section>
+
+        {/* ── BREADCRUMBS ─────────────────────────────── */}
+        <Section title="Breadcrumbs" description="Navigation trail with automatic separator.">
+          <Breadcrumbs
+            items={[
+              { label: 'Dashboard', href: '/' },
+              { label: 'Orders', href: '/orders' },
+              { label: 'Order #1042' },
+            ]}
+          />
+        </Section>
+
+        {/* ── AVATAR ───────────────────────────────────── */}
+        <Section title="Avatar" description="User avatars with fallback initials.">
+          <DemoRow label="Avatars">
+            <Avatar>
+              <AvatarFallback>BN</AvatarFallback>
+            </Avatar>
+            <Avatar>
+              <AvatarImage src="https://i.pravatar.cc/80?u=bningoo" alt="User" />
+              <AvatarFallback>U</AvatarFallback>
+            </Avatar>
+            <Avatar className="h-12 w-12">
+              <AvatarFallback className="text-lg">JD</AvatarFallback>
+            </Avatar>
+            <Avatar className="h-8 w-8">
+              <AvatarFallback className="text-xs">SM</AvatarFallback>
+            </Avatar>
+          </DemoRow>
+        </Section>
+
+        {/* ── SIDEBAR ──────────────────────────────────── */}
+        <Section title="Sidebar" description="Collapsible side panel.">
+          <div className="flex rounded-lg overflow-hidden border border-neutral-200 dark:border-neutral-800">
+            <Sidebar width="sm">
+              <div className="p-4">
+                <Text variant="body-sm" weight="semibold" className="text-primary-600">🍽️ Menu</Text>
+              </div>
+              <Separator />
+              {['Dashboard', 'Orders', 'Menu', 'Reports'].map(item => (
+                <div key={item} className="px-4 py-2 hover:bg-neutral-100 dark:hover:bg-neutral-800 cursor-pointer">
+                  <Text variant="body-sm">{item}</Text>
                 </div>
               ))}
-            </Stack>
-          </DemoSection>
-
-          <DemoSection title="Separator">
-            <div className="w-full space-y-2">
-              <p className="text-sm">Above the separator</p>
-              <Separator />
-              <p className="text-sm">Below the separator</p>
+            </Sidebar>
+            <div className="flex-1 p-6 bg-neutral-50 dark:bg-neutral-950">
+              <Text variant="body-sm" color="muted">Sidebar content area — the main panel fills remaining space.</Text>
             </div>
-          </DemoSection>
-
-          <DemoSection title="Breadcrumbs">
-            <Breadcrumbs items={[
-              { label: 'Dashboard', href: '/dashboard' },
-              { label: 'Orders', href: '/dashboard/orders' },
-              { label: '#1234' },
-            ]} />
-          </DemoSection>
-        </div>
-
-        {/* ── Sidebar Layout Demo ── */}
-        <div className="mt-16">
-          <H2 className="mb-4">Sidebar Layout</H2>
-          <div className="flex flex-col overflow-hidden rounded-xl border border-neutral-200 dark:border-neutral-800 md:flex-row">
-            <aside className="border-b border-neutral-200 bg-neutral-100 p-4 dark:border-neutral-800 dark:bg-neutral-900 md:w-48 md:border-b-0 md:border-r">
-              <nav className="flex flex-col gap-2">
-                <a href="#" className="rounded-md bg-white px-3 py-2 text-sm font-medium shadow-sm dark:bg-neutral-800">Dashboard</a>
-                <a href="#" className="rounded-md px-3 py-2 text-sm text-neutral-600 hover:bg-white/50 dark:text-neutral-400 dark:hover:bg-neutral-800/50">Orders</a>
-                <a href="#" className="rounded-md px-3 py-2 text-sm text-neutral-600 hover:bg-white/50 dark:text-neutral-400 dark:hover:bg-neutral-800/50">Menu</a>
-                <a href="#" className="rounded-md px-3 py-2 text-sm text-neutral-600 hover:bg-white/50 dark:text-neutral-400 dark:hover:bg-neutral-800/50">Settings</a>
-              </nav>
-            </aside>
-            <main className="flex-1 p-6">
-              <H3>Dashboard Content</H3>
-              <Muted>This demonstrates the sidebar + main content layout pattern using flexbox.</Muted>
-            </main>
           </div>
-        </div>
+        </Section>
 
-        {/* ── Combined Example Card ── */}
-        <div className="mt-16">
-          <Separator className="mb-8" />
-          <H2 className="mb-4">Example: Order Card</H2>
-          <Grid cols={3}>
-            {[
-              { title: 'Order #1042', status: 'Preparing', items: 3, total: '$42.50' },
-              { title: 'Order #1043', status: 'Delivered', items: 5, total: '$78.20' },
-              { title: 'Order #1044', status: 'Pending', items: 1, total: '$15.00' },
-            ].map((order) => (
-              <Card key={order.title}>
-                <CardHeader>
-                  <div className="flex items-center justify-between">
-                    <CardTitle className="text-base">{order.title}</CardTitle>
-                    <span className={cn(
-                      'rounded-full px-2 py-0.5 text-xs font-medium',
-                      order.status === 'Preparing' && 'bg-accent-100 text-accent-700',
-                      order.status === 'Delivered' && 'bg-primary-100 text-primary-700',
-                      order.status === 'Pending' && 'bg-neutral-100 text-neutral-700',
-                    )}>
-                      {order.status}
-                    </span>
-                  </div>
-                  <CardDescription>{order.items} items</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-2xl font-bold">{order.total}</p>
-                </CardContent>
-                <CardFooter className="gap-2">
-                  <Button size="sm" variant="outline" className="w-full">View</Button>
-                  <Button size="sm" className="w-full">Accept</Button>
-                </CardFooter>
-              </Card>
-            ))}
-          </Grid>
-        </div>
+        {/* ── SEPARATOR ────────────────────────────────── */}
+        <Section title="Separator" description="Visual divider for content sections.">
+          <Stack gap="sm">
+            <Text variant="body-sm">Above the separator</Text>
+            <Separator />
+            <Text variant="body-sm">Below the separator</Text>
+          </Stack>
+          <DemoRow label="Vertical Separator">
+            <Stack direction="row" gap="sm" align="center">
+              <Text variant="body-sm">Left</Text>
+              <Separator orientation="vertical" className="h-6" />
+              <Text variant="body-sm">Right</Text>
+            </Stack>
+          </DemoRow>
+        </Section>
 
-        <footer className="mt-20 border-t border-neutral-200 py-8 text-center dark:border-neutral-800">
-          <Caption>Bningoo Design System &middot; Built with shadcn/ui patterns &middot; Gen 2</Caption>
+        {/* ── FOOTER ───────────────────────────────────── */}
+        <Spacer size="xl" />
+        <Separator />
+        <footer className="py-6 text-center">
+          <Text variant="caption" color="muted">
+            Bningoo Design System · Gen 2 · Built with Next.js 15 + Tailwind CSS v4
+          </Text>
         </footer>
       </Container>
-    </div>
+    </>
   );
 }
-
-// Needed for the status badges in the order cards
-import { cn } from '@bningoo/ui';

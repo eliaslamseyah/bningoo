@@ -13,3 +13,10 @@ out/
 
 # npm lockfile (we use pnpm)
 package-lock.json
+
+.vercel
+.env*
+
+# Vercel
+.vercel
+.env.local

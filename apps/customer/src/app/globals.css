@@ -1,0 +1,7 @@
+@import "tailwindcss";
+@import "@bningoo/ui/src/globals.css";
+
+/* Per-app overrides can go here */
+@theme {
+  /* app-specific customizations */
+}

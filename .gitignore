@@ -1,0 +1,15 @@
+node_modules/
+.next/
+*.tsbuildinfo
+dist/
+turbo/
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+out/
+.cache/
+
+# npm lockfile (we use pnpm)
+package-lock.json
